@@ -1,7 +1,5 @@
 import json
 from googletrans import Translator, LANGUAGES
-import wave
-import torch
 
 from asgiref.sync import async_to_sync
 from googletrans import Translator, LANGUAGES
@@ -10,7 +8,6 @@ from channels.generic.websocket import WebsocketConsumer
 import spacy
 
 
-from .NER_models import Ner_Models
 
 class TranslatorConsumer(WebsocketConsumer):
     def connect(self):
@@ -19,12 +16,7 @@ class TranslatorConsumer(WebsocketConsumer):
        
         self.accept()
         print("connet")
-        # Or accept the connection and specify a chosen subprotocol.
-        # A list of subprotocols specified by the connecting client
-        # will be available in self.scope['subprotocols']
-        #self.accept("subprotocol")
-        # To reject the connection, call:
-        #self.close()
+    
 
     def receive(self, text_data=None, bytes_data=None):
         # Called with either text_data or bytes_data for each frame
@@ -42,7 +34,7 @@ class TranslatorConsumer(WebsocketConsumer):
         }
        
 
-        print(slang,dstlang)
+
         
         translator = Translator()
         translation = translator.translate(text_data_json["transcript"], src=slang, dest=dstlang)
@@ -55,7 +47,9 @@ class TranslatorConsumer(WebsocketConsumer):
             for ent in doc.ents:
                 ent1.append(ent.text)
                 labels1.append(ent.label_)
-        print(ent1)
+            
+        
+        
         if dstlang  in language_models :
             print(language_models[dstlang])
             nlp = spacy.load(language_models[dstlang])
@@ -64,8 +58,9 @@ class TranslatorConsumer(WebsocketConsumer):
                 ent2.append(ent.text)
                 labels2.append(ent.label_)
 
+        print(ent1)
         print(ent2)
-        
+        print(transl)
         self.send(text_data=json.dumps({
                         'translation': transl,
                          "speechHighlitedWords":{
@@ -75,13 +70,8 @@ class TranslatorConsumer(WebsocketConsumer):
                         "highlightedWords":{
                             "label":labels2,
                             "entity":ent2
-                        }
+                        }                    }))
 
-                    }))
-  
-        
-    
-        
 
     def disconnect(self, close_code):
         # Called when the socket closes
