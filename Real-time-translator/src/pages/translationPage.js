@@ -51,8 +51,8 @@ const TranslationPage = () => {
           websocket.onmessage = event => {
             const data = JSON.parse(event.data);
             setTranslation(data.translation);
-            setTranslationHighlightWords(data.translationHighlightedWords);
-            setSpeechHighlightWords(data.transcriptionHighlightedWords);
+            setTranslationHighlightWords(data.highlightedWords);
+            setSpeechHighlightWords(data.speechHighlitedWords);
           };
         }
       }
