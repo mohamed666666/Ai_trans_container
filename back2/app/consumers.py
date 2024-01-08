@@ -64,7 +64,7 @@ class TranslatorConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({
                         'translation': transl,
                          "speechHighlitedWords":{
-                            "labels":labels1,
+                            "label":labels1,
                             "entity":ent1
                          },
                         "highlightedWords":{
