@@ -50,6 +50,7 @@ const TranslationPage = () => {
           // handle the response
           websocket.onmessage = event => {
             const data = JSON.parse(event.data);
+            console.log(data);
             setTranslation(data.translation);
             setTranslationHighlightWords(data.highlightedWords);
             setSpeechHighlightWords(data.speechHighlitedWords);

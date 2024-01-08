@@ -11,8 +11,6 @@ import { useToast } from '@chakra-ui/react';
 const ControlPanel = ({
   fromLanguage,
   toLanguage,
-  text,
-  setText,
   setTranslation,
   setSelectedFile,
   selectedFile,
@@ -51,25 +49,25 @@ const ControlPanel = ({
 
   const sendToServer = data => {
     if (websocket && websocket.readyState === WebSocket.OPEN) {
+      console.log(data);
       websocket.send(JSON.stringify(data));
+      
       toast({
         title: 'Success',
         description: 'File uploaded successfully',
         status: 'success',
         duration: 9000,
         isClosable: true,
-        position: 'bottom-left',
+        position: 'top-left',
       });
 
       websocket.onmessage = e => {
-        const data = JSON.parse(e.data);
+        const datar = JSON.parse(e.data);
+        console.log(datar);
         setIsLoading(false);
-        setTranslation(data.translation);
-        setText(data.text);
-        setTranslationHighlightWords(data.highlightedWords);
-        setSpeechHighlightWords(data.speechHighlitedWords);
-        console.log(data.highlightedWords);
-
+        setTranslation(datar.translation);
+        setTranslationHighlightWords(datar.highlightedWords);
+        setSpeechHighlightWords(datar.speechHighlitedWords);
       };
     } else {
       toast({
@@ -78,7 +76,7 @@ const ControlPanel = ({
         status: 'error',
         duration: 9000,
         isClosable: true,
-        position: 'bottom-left',
+        position: 'top-left',
       });
     }
   };
@@ -125,9 +123,7 @@ const ControlPanel = ({
         inputRef={inputRef}
       >
         <Button
-          isDisabled={
-            fromLanguage && toLanguage && !(isSpeaking || text) ? false : true
-          }
+          isDisabled={fromLanguage && toLanguage && !isSpeaking ? false : true}
           leftIcon={<Icon as={IoIosCloudUpload} />}
           colorScheme="green"
           size="md"
