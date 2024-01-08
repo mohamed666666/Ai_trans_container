@@ -24,6 +24,7 @@ class TranslatorConsumer(WebsocketConsumer):
         ent1,ent2,labels1,labels2=[],[],[],[]
        
         text_data_json = json.loads(text_data)
+        print(text_data_json)
         
         slang=text_data_json["fromLanguage"]
         dstlang=text_data_json["toLanguage"]
@@ -63,12 +64,12 @@ class TranslatorConsumer(WebsocketConsumer):
         print(transl)
         self.send(text_data=json.dumps({
                         'translation': transl,
-                         "speechHighlitedWords":{
+                         "translationHighlightedWords":{
                             "labels":labels1,
                             "entity":ent1
                          },
-                        "highlightedWords":{
-                            "label":labels2,
+                        "transcriptionHighlightedWords":{
+                            "labels":labels2,
                             "entity":ent2
                         }                    }))
 

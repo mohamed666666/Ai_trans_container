@@ -1,4 +1,56 @@
+
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Example</title>
+</head>
+<body>
+
+  <h1>WebSocket Example</h1>
+  
+  <input type="text" id="messageInput" placeholder="Type your message">
+  <button onclick="sendMessage()">Send Message</button>
+
+  <script>
+    // Replace 'ws://localhost:8080' with your WebSocket server address
+    const socket = new WebSocket('ws://localhost:8000/ws/app/translate/');
+
+    socket.addEventListener('open', (event) => {
+      console.log('WebSocket connection opened:', event);
+    });
+
+    socket.addEventListener('message', (event) => {
+      console.log('Received message:', event.data);
+    });
+
+    socket.addEventListener('close', (event) => {
+      console.log('WebSocket connection closed:', event);
+    });
+    
+
+    function sendMessage() {
+      const messageInput = document.getElementById('messageInput');
+      const message = messageInput.value;
+      const datatosend = {
+      
+      datakey: message,
+    };
+      
+      if (message.trim() !== '') {
+        socket.send(JSON.stringify(datatosend));
+    
+        messageInput.value = '';
+      }
+    }
+  </script>
+
+</body>
+</html>
+<!-- 
+
+!DOCTYPE html>
 
 <html>
 
@@ -26,7 +78,30 @@
 
 
         function startRecording() {
-            navigator.mediaDevices
+         
+                    
+                        const websocket = new WebSocket('ws://'
+                            + window.location.host
+                            + '/ws/app/translate/'
+                        );
+                        
+
+                            websocket.onopen = 
+
+                              
+                            websocket.send(JSON.stringify({ type: 'audio', audio: reader.result }));
+                            console.log('data sent .', reader.result)
+
+                          
+                                //reader.readAsDataURL(audioBlob);
+
+
+                     
+
+                        };
+
+/*
+   navigator.mediaDevices
                 .getUserMedia({ audio: true })
                 .then(function (stream) {
                     mediaRecorder = new MediaRecorder(stream);
@@ -37,55 +112,11 @@
                         }
                     };
 
-                    mediaRecorder.onstop = function () {
-                        const websocket = new WebSocket('ws://'
-                            + window.location.host
-                            + '/ws/app/translate/'
-                        );
-                        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-                        blobToBytes(audioBlob, function (bytes) {
-                            console.log("Bytes of recorded audio:", bytes);
-
-                            websocket.onopen = function () {
-                                const reader = new FileReader();
-                                console.log(reader)
-
-                                reader.onloadend = () => {
-                                    //const base64data = reader.result.split(',')[1];
-                                    //websocket.send(base64data);
-
-                                    console.log("inside send")
-                                    websocket.send(JSON.stringify({ type: 'audio', audio: reader.result }));
-                                    console.log('data sent .', reader.result)
-
-                                };
-                                //reader.readAsDataURL(audioBlob);
+*/
 
 
-                            };
-
-                        });
-
-
-
-
-                        websocket.onclose = function () {
-                            console.log("WebSocket connection closed.");
-                        };
-
-                        websocket.onerror = function (error) {
-                            console.error("WebSocket error: ", error);
-                        };
-                    };
-
-                    mediaRecorder.start();
-                    startButton.disabled = true;
-                    stopButton.disabled = false;
-                })
-                .catch(function (error) {
-                    console.error("Error accessing the microphone:", error);
-                });
-        }
+            
+       
 
         function stopRecording() {
             mediaRecorder.stop();
@@ -125,8 +156,10 @@
 
 </html>
 
-<!-- 
-<!DOCTYPE html>
+
+
+
+
 <html>
 
 <head>

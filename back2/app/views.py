@@ -16,5 +16,6 @@ def index(request):
 
 def trans(request):
     return render(request, "app/translate.html")
+    
 
 
